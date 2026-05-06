@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP开发者文档中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #cbd5e1;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #2563eb 0%, #93c5fd 100%);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1em;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            background-color: #ffffff;
+            color: #0f172a;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+        }
+
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+            color: #1e40af;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        .mcp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 20px;
+        }
+
+        .mcp-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .mcp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .mcp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .mcp-name {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .mcp-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-local {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .badge-official {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-community {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+        }
+
+        .mcp-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .mcp-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .meta-item span {
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .mcp-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background-color: #e0f2fe;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #0369a1;
+        }
+
+        .mcp-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .rating {
+            display: flex;
+            gap: 4px;
+        }
+
+        .star {
+            color: #f59e0b;
+            font-size: 16px;
+        }
+
+        .star.empty {
+            color: #d1d5db;
+        }
+
+        .detail-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .detail-link:hover {
+            text-decoration: underline;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            margin: 20px auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #475569;
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-title {
+            font-size: 2em;
+            margin-bottom: 16px;
+        }
+
+        .modal-section {
+            margin-bottom: 30px;
+        }
+
+        .modal-section h3 {
+            font-size: 1.1em;
+            color: #1e40af;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-section p {
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .modal-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .modal-section li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        .modal-section li:last-child {
+            border-bottom: none;
+        }
+
+        .modal-section li strong {
+            color: #1e293b;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .community-evaluation {
+            background-color: #f0f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #60a5fa;
+        }
+
+        .community-evaluation h4 {
+            color: #0369a1;
+            margin-bottom: 12px;
+        }
+
+        .evaluation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+
+        .evaluation-icon {
+            font-size: 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1e40af;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        .code-block code {
+            color: #c9d1d9;
+            font-family: "Fira Code", "Consolas", monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-block .comment {
+            color: #8b949e;
+        }
+
+        .code-block .keyword {
+            color: #ff7b72;
+        }
+
+        .code-block .string {
+            color: #a5d6ff;
+        }
+
+        .code-block .property {
+            color: #7ee787;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+            background-color: #ffffff;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 2px solid #e2e8f0;
+            color: #64748b;
+            background-color: #f8fafc;
+        }
+
+        @media (max-width: 768px) {
+            .mcp-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 24px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ MCP开发者文档中心</h1>
+            <p>Model Context Protocol 服务器完整指南 | 超过100个MCP服务器详解</p>
+        </header>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索MCP服务器... (支持名称、功能、标签搜索)">
+        </div>
+
+        <div class="category-tabs" id="categoryTabs">
+            <div class="category-tab active" data-category="all">全部</div>
+            <div class="category-tab" data-category="search">🌐 搜索与抓取</div>
+            <div class="category-tab" data-category="database">🗄️ 数据库与存储</div>
+            <div class="category-tab" data-category="devtools">💻 开发工具</div>
+            <div class="category-tab" data-category="filesystem">📁 文件系统</div>
+            <div class="category-tab" data-category="devops">🚀 DevOps与云</div>
+            <div class="category-tab" data-category="ai">🤖 AI与图像</div>
+            <div class="category-tab" data-category="media">🎨 多媒体</div>
+            <div class="category-tab" data-category="productivity">📋 项目管理</div>
+            <div class="category-tab" data-category="business">💰 商业平台</div>
+            <div class="category-tab" data-category="memory">🧠 AI记忆</div>
+            <div class="category-tab" data-category="frontend">🎯 前端开发</div>
+            <div class="category-tab" data-category="monitoring">🛡️ 监控安全</div>
+            <div class="category-tab" data-category="utility">🌍 实用工具</div>
+        </div>
+
+        <div class="mcp-grid" id="mcpGrid"></div>
+        <div class="no-results hidden" id="noResults">
+            <h3>🔍 没有找到匹配的MCP服务器</h3>
+            <p>请尝试其他搜索关键词或浏览不同分类</p>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>📚 MCP开发者文档中心 | 基于社区驱动的MCP服务器参考指南</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">本项目仅供学习和参考，MCP服务器功能可能随版本更新而变化</p>
+    </footer>
+
+    <script>
+        const mcpData = [
+            {
+                id: "brave-search",
+                name: "Brave Search",
+                category: "search",
+                badge: "official",
+                description: "联网查资料最常用的方案，让AI直接用Brave搜全网和本地结果，适合做市场调研或查最新资讯。",
+                owner: "Brave Software",
+                background: "Brave Software是一家专注于隐私保护的互联网公司，其搜索引擎不跟踪用户行为，提供无追踪的搜索体验。",
+                features: ["网络搜索", "本地搜索", "隐私保护", "实时结果", "自定义过滤"],
+                tags: ["搜索", "API", "隐私"],
+                rating: 4.5,
+                stars: 2800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-brave-search",
+                pros: ["隐私保护强", "搜索速度快", "结果相关度高"],
+                cons: ["需要API密钥", "免费额度有限"],
+                community: "社区反馈积极，特别是在注重隐私的开发者中受欢迎。集成简单，文档清晰。",
+                useCases: ["网络研究", "内容聚合", "隐私优先应用"]
+            },
+            {
+                id: "tavily",
+                name: "Tavily",
+                category: "search",
+                badge: "official",
+                description: "专为AI问答和RAG应用设计的搜索引擎，能实时搜网并返回结构化数据，直接喂给大模型用。",
+                owner: "Tavily Inc.",
+                background: "Tavily是一个专为AI应用设计的搜索API，由Tovie AI团队开发，旨在为LLM提供可靠、最新的网络信息。",
+                features: ["AI优化搜索", "实时数据", "结构化输出", "多语言支持", "内容提取"],
+                tags: ["AI搜索", "实时数据", "结构化"],
+                rating: 4.6,
+                stars: 3200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-tavily",
+                pros: ["专为AI优化", "结果结构化", "实时性强"],
+                cons: ["需要付费订阅", "免费额度较少"],
+                community: "AI开发者首选搜索工具，社区评价很高，被广泛用于RAG应用和研究场景。",
+                useCases: ["RAG应用", "AI研究", "实时信息查询"]
+            },
+            {
+                id: "exa-search",
+                name: "Exa Search",
+                category: "search",
+                badge: "official",
+                description: "用自然语言描述你想搜的内容，Exa能理解你的意图并精准匹配，适合做语义搜索和智能问答。",
+                owner: "Exa Labs",
+                background: "Exa Labs专注于构建下一代搜索技术，利用深度学习提供语义搜索能力，帮助AI理解搜索意图。",
+                features: ["语义搜索", "自然语言查询", "实时更新", "多源聚合", "智能过滤"],
+                tags: ["语义搜索", "AI驱动", "过滤"],
+                rating: 4.4,
+                stars: 2100,
+                github: "exa-one-dev/mcp-servers",
+                install: "npx @exa-one-dev/mcp-server",
+                pros: ["语义理解强", "查询灵活", "结果精准"],
+                cons: ["学习曲线", "成本较高"],
+                community: "技术社区认为Exa代表了搜索的未来方向，特别适合需要理解语义的应用场景。",
+                useCases: ["语义搜索", "内容推荐", "智能问答"]
+            },
+            {
+                id: "duckduckgo",
+                name: "DuckDuckGo Search Server",
+                category: "search",
+                badge: "community",
+                description: "不用注册、不用API密钥就能让AI联网搜索，免费又保护隐私，适合个人项目和快速原型开发。",
+                owner: "社区开发者",
+                background: "由开源社区维护的项目，利用DuckDuckGo的即时答案API，为MCP提供免费搜索能力。",
+                features: ["免费搜索", "即时答案", "隐私保护", "无密钥需求", "多种搜索模式"],
+                tags: ["免费", "隐私", "社区"],
+                rating: 4.2,
+                stars: 1800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-duckduckgo",
+                pros: ["完全免费", "无需注册", "隐私友好"],
+                cons: ["结果有限制", "无高级功能"],
+                community: "轻量级搜索首选，社区评价稳定，适合预算有限的个人项目。",
+                useCases: ["原型开发", "个人项目", "快速搜索"]
+            },
+            {
+                id: "firecrawl",
+                name: "Firecrawl",
+                category: "search",
+                badge: "official",
+                description: "把整个网站扒下来转成结构化数据，直接喂给大模型做知识库，RAG应用准备数据的首选工具。",
+                owner: "Firecrawl Team",
+                background: "Firecrawl是Mendable.ai推出的网站爬取工具，专注于将网页内容转换为AI友好的格式。",
+                features: ["整站爬取", "结构化提取", "Markdown转换", "智能解析", "批量处理"],
+                tags: ["爬虫", "结构化", "LLM优化"],
+                rating: 4.7,
+                stars: 4500,
+                github: "firecrawl/mcp-server",
+                install: "npx firecrawl-mcp-server",
+                pros: ["专为LLM优化", "结构化程度高", "使用简单"],
+                cons: ["需要API密钥", "付费服务"],
+                community: "RAG应用开发者极力推荐，被认为是网站内容提取的最佳工具之一。",
+                useCases: ["RAG数据准备", "网站内容提取", "文档转换"]
+            },
+            {
+                id: "hyperbrowser",
+                name: "Hyperbrowser",
+                category: "search",
+                badge: "community",
+                description: "云端浏览器帮你自动填表单、滚动页面、截图抓数据，适合需要JavaScript渲染的复杂页面抓取。",
+                owner: "Hyperbrowser",
+                background: "Hyperbrowser提供基于云的浏览器自动化服务，支持复杂网页抓取和数据提取任务。",
+                features: ["云端浏览器", "结构化提取", "自动滚动", "表单填写", "截图功能"],
+                tags: ["浏览器自动化", "云服务", "抓取"],
+                rating: 4.3,
+                stars: 1500,
+                github: "hyperbrowser/mcp-hyperbrowser",
+                install: "npm install @hyperbrowser/mcp-server",
+                pros: ["云端托管", "无需维护", "功能全面"],
+                cons: ["需要付费", "依赖网络"],
+                community: "企业用户评价良好，适合需要大规模网页抓取的商业应用。",
+                useCases: ["企业数据采集", "竞品监控", "内容聚合"]
+            },
+            {
+                id: "apify-actors",
+                name: "Apify Actors",
+                category: "search",
+                badge: "official",
+                description: "想爬社交媒体或电商数据不用自己写爬虫，直接选现成的模板就能跑，省时省力。",
+                owner: "Apify",
+                background: "Apify是一个领先的网页自动化平台，提供超过2000个预构建的爬虫和自动化工具。",
+                features: ["预构建爬虫", "云端运行", "数据存储", "调度功能", "API集成"],
+                tags: ["平台集成", "预构建", "自动化"],
+                rating: 4.5,
+                stars: 2900,
+                github: "apify/mcp-server",
+                install: "npx @apify/mcp-server",
+                pros: ["生态丰富", "无需开发", "稳定可靠"],
+                cons: ["平台锁定", "成本累积"],
+                community: "专业开发者首选，特别是需要快速集成现成爬虫的场景。",
+                useCases: ["社交媒体分析", "电商监控", "数据聚合"]
+            },
+            {
+                id: "oxylabs-mcp",
+                name: "Oxylabs MCP",
+                category: "search",
+                badge: "official",
+                description: "企业级数据抓取方案，自带代理轮换和地理定位，适合大规模采集和绕过访问限制的场景。",
+                owner: "Oxylabs",
+                background: "Oxylabs是企业级代理和数据抓取服务的领先提供商，为财富500强公司提供支持。",
+                features: ["代理轮换", "地理定位", "自动重试", "JavaScript渲染", "高成功率"],
+                tags: ["企业级", "代理", "高可用"],
+                rating: 4.1,
+                stars: 800,
+                github: "oxylabs/mcp-server",
+                install: "npm install @oxylabs/mcp-server",
+                pros: ["企业级可靠性", "全球覆盖", "高成功率"],
+                cons: ["价格昂贵", "配置复杂"],
+                community: "大型企业项目使用，技术支持优秀，但不适合个人或小项目。",
+                useCases: ["大规模抓取", "绕过地理限制", "企业数据采集"]
+            },
+            {
+                id: "search1api",
+                name: "Search1API",
+                category: "search",
+                badge: "community",
+                description: "搜索和爬虫功能二合一的API，不用对接多个服务，一个接口搞定所有网络数据获取需求。",
+                owner: "社区开发者",
+                background: "由独立开发者创建的一站式搜索解决方案，整合多个搜索源到一个API。",
+                features: ["多源聚合", "统一接口", "内容抓取", "结果去重", "实时搜索"],
+                tags: ["聚合", "一站式", "简单易用"],
+                rating: 4.0,
+                stars: 950,
+                github: "search1api/mcp",
+                install: "npm install search1api-mcp",
+                pros: ["一站式解决方案", "简单易用", "成本低"],
+                cons: ["功能有限", "社区规模小"],
+                community: "小型项目和个人开发者使用，简单够用，但高级功能不如专业服务。",
+                useCases: ["快速原型", "简单搜索需求", "个人项目"]
+            },
+            {
+                id: "jina-ai",
+                name: "Jina AI",
+                category: "search",
+                badge: "official",
+                description: "用Reader把网页转成LLM能读懂的格式，还能做向量嵌入和语义搜索，开源社区口碑很好。",
+                owner: "Jina AI",
+                background: "Jina AI提供开源的神经搜索和AI基础设施服务，其Reader服务广受好评。",
+                features: ["Reader服务", "向量嵌入", "神经搜索", "文档理解", "多格式支持"],
+                tags: ["开源", "神经搜索", "嵌入"],
+                rating: 4.6,
+                stars: 5100,
+                github: "jinaai/mcp",
+                install: "npx @jina-ai/mcp-server",
+                pros: ["开源免费选项", "功能强大", "生态完整"],
+                cons: ["商业功能需付费", "文档有时不完整"],
+                community: "AI开发者社区极力推崇，特别是其Reader和Embeddings服务被评为最佳实践。",
+                useCases: ["内容提取", "向量搜索", "文档处理"]
+            },
+            {
+                id: "fetch",
+                name: "Fetch",
+                category: "search",
+                badge: "community",
+                description: "给AI一个网页链接，它自动提取正文内容并清洗成干净文本，适合做内容抓取和格式转换。",
+                owner: "社区开发者",
+                background: "专注于内容提取和格式转换的MCP服务器，将复杂网页内容转换为结构化数据。",
+                features: ["HTML解析", "内容清洗", "格式转换", "智能提取", "多格式输出"],
+                tags: ["内容提取", "格式转换", "解析"],
+                rating: 4.3,
+                stars: 1600,
+                github: "modelcontextprotocol/server-fetch",
+                install: "npx @modelcontextprotocol/server-fetch",
+                pros: ["专注内容提取", "使用简单", "结果干净"],
+                cons: ["功能相对单一", "复杂页面需配置"],
+                community: "内容处理必备工具，社区评价稳定，是网页内容提取的基础选择。",
+                useCases: ["内容清洗", "数据提取", "格式转换"]
+            },
+            {
+                id: "multi-fetch",
+                name: "Multi Fetch",
+                category: "search",
+                badge: "community",
+                description: "同时抓取多个网页不怕报错，自带并发和重试机制，适合大规模数据采集和批量处理任务。",
+                owner: "社区开发者",
+                background: "高性能网络内容获取工具，支持并发和批量处理，提高数据采集效率。",
+                features: ["并发请求", "批量处理", "多格式支持", "失败重试", "速率控制"],
+                tags: ["高性能", "批量", "并发"],
+                rating: 4.2,
+                stars: 1200,
+                github: "modelcontextprotocol/server-multifetch",
+                install: "npx @modelcontextprotocol/server-multifetch",
+                pros: ["性能优秀", "批量处理", "错误处理好"],
+                cons: ["资源消耗大", "需要合理配置"],
+                community: "大规模数据采集项目首选，开发者反馈其并发性能表现出色。",
+                useCases: ["大规模采集", "批量处理", "性能敏感应用"]
+            },
+            {
+                id: "web-research",
+                name: "Web Research Server",
+                category: "search",
+                badge: "official",
+                description: "让AI帮你做深度调研，自动搜索多个来源并汇总分析，适合学术研究、市场调研和竞品分析。",
+                owner: "Model Context Protocol",
+                background: "官方出品的网络研究工具，专注于为AI助手提供全面的网络研究能力。",
+                features: ["深度研究", "信息聚合", "来源追踪", "摘要生成", "引用管理"],
+                tags: ["研究", "AI驱动", "官方"],
+                rating: 4.4,
+                stars: 2400,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-web-research",
+                pros: ["官方支持", "功能全面", "持续更新"],
+                cons: ["依赖外部API", "配置较复杂"],
+                community: "学术研究和深度分析场景的首选工具，官方维护保证质量和稳定性。",
+                useCases: ["学术研究", "深度分析", "市场调研"]
+            },
+            {
+                id: "gitingest",
+                name: "Gitingest",
+                category: "search",
+                badge: "community",
+                description: "接手陌生项目时让AI快速理解整个代码库的结构和逻辑，适合代码审查、文档生成和老项目接手。",
+                owner: "社区开发者",
+                background: "专门用于代码库理解和分析的MCP工具，帮助AI快速掌握大型代码仓库。",
+                features: ["仓库分析", "代码理解", "结构提取", "依赖分析", "文档生成"],
+                tags: ["代码分析", "Git", "理解"],
+                rating: 4.5,
+                stars: 2100,
+                github: "mcprestaurant/gitingest",
+                install: "npm install gitingest-mcp",
+                pros: ["代码理解强", "分析深入", "使用简单"],
+                cons: ["大型仓库较慢", "资源消耗高"],
+                community: "代码审查和文档生成场景的重要工具，被认为是理解陌生代码库的利器。",
+                useCases: ["代码审查", "文档生成", "代码库理解"]
+            },
+            {
+                id: "postgresql-local",
+                name: "PostgreSQL Local",
+                category: "database",
+                badge: "local",
+                description: "安全只读地连接本地PostgreSQL数据库，让AI帮你查数据做分析，不用担心误改数据。",
+                owner: "官方本地服务",
+                background: "Model Context Protocol官方的本地数据库集成方案，强调数据安全。",
+                features: ["只读访问", "本地连接", "SQL查询", "数据浏览", "安全隔离"],
+                tags: ["本地", "PostgreSQL", "安全"],
+                rating: 4.6,
+                stars: 3500,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-postgres",
+                pros: ["本地安全", "官方支持", "使用简单"],
+                cons: ["只读限制", "需要本地安装"],
+                community: "本地开发环境必备工具，社区认为其安全模型设计合理。",
+                useCases: ["本地开发", "数据分析", "隐私敏感数据"]
+            },
+            {
+                id: "supabase-local",
+                name: "Supabase Local",
+                category: "database",
+                badge: "local",
+                description: "开源的Firebase替代品，自带Postgres数据库、实时订阅和用户认证，适合做SaaS和移动应用的后端。",
+                owner: "Supabase",
+                background: "Supabase是开源的Firebase替代品，提供完整的后端即服务解决方案。",
+                features: ["Postgres数据库", "实时订阅", "边缘函数", "存储服务", "Auth认证"],
+                tags: ["BaaS", "实时", "开源"],
+                rating: 4.7,
+                stars: 4200,
+                github: "supabase/mcp",
+                install: "npx @supabase/mcp-server",
+                pros: ["功能完整", "实时能力强", "开源免费"],
+                cons: ["配置复杂", "学习曲线"],
+                community: "全栈开发者极力推荐，被认为是构建现代应用的最佳后端选择之一。",
+                useCases: ["移动应用", "SaaS产品", "实时应用"]
+            },
+            {
+                id: "neon-database",
+                name: "Neon Database",
+                category: "database",
+                badge: "official",
+                description: "云原生的Serverless Postgres，不用操心运维，还能像Git一样分支管理数据库，开发和测试很方便。",
+                owner: "Neon",
+                background: "Neon是云原生的Serverless Postgres解决方案，支持分支和即时回滚。",
+                features: ["Serverless架构", "分支功能", "即时回滚", "自动扩缩", "只读副本"],
+                tags: ["Serverless", "云原生", "分支"],
+                rating: 4.5,
+                stars: 2800,
+                github: "neondatabase/mcp",
+                install: "npx @neondatabase/mcp-server",
+                pros: ["Serverless便捷", "分支功能强", "成本优化"],
+                cons: ["冷启动延迟", "功能限制"],
+                community: "现代应用开发者的选择，特别欣赏其分支功能简化开发流程。",
+                useCases: ["现代应用", "多环境管理", "成本敏感项目"]
+            },
+            {
+                id: "postgrest",
+                name: "PostgREST",
+                category: "database",
+                badge: "official",
+                description: "把PostgreSQL数据库自动生成RESTful API，不用写后端代码就能操作数据，开发原型特别快。",
+                owner: "PostgREST团队",
+                background: "PostgREST是一个稳定的开源项目，为PostgreSQL自动生成RESTful API。",
+                features: ["自动API生成", "CRUD操作", "权限控制", "数据验证", "关系查询"],
+                tags: ["REST API", "自动化", "CRUD"],
+                rating: 4.4,
+                stars: 3100,
+                github: "PostgREST/postgrest",
+                install: "npx @modelcontextprotocol/server-postgrest",
+                pros: ["API自动生成", "标准化接口", "安全可靠"],
+                cons: ["灵活性有限", "需要PostgreSQL"],
+                community: "后端开发者常用工具，被认为是快速构建REST API的经典选择。",
+                useCases: ["快速API开发", "原型构建", "标准接口需求"]
+            },
+            {
+                id: "mysql-server",
+                name: "MySQL Server",
+                category: "database",
+                badge: "community",
+                description: "让AI直接操作MySQL数据库，增删改查都能做，适合Web应用和企业系统的数据管理。",
+                owner: "社区开发者",
+                background: "MySQL是最流行的开源关系型数据库之一，该MCP提供标准化的交互接口。",
+                features: ["完整CRUD", "事务支持", "连接池", "SQL兼容", "安全连接"],
+                tags: ["MySQL", "关系型", "通用"],
+                rating: 4.3,
+                stars: 2200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-mysql",
+                pros: ["MySQL兼容", "功能完整", "社区成熟"],
+                cons: ["配置繁琐", "性能调优复杂"],
+                community: "企业应用常用方案，MySQL用户评价稳定，文档丰富。",
+                useCases: ["企业应用", "Web应用", "传统系统"]
+            },
+            {
+                id: "mongodb",
+                name: "MongoDB",
+                category: "database",
+                badge: "official",
+                description: "官方出品的MongoDB集成，让AI直接操作文档数据库，适合内容管理、实时分析和物联网项目。",
+                owner: "MongoDB",
+                background: "MongoDB是领先的文档数据库，该MCP提供原生的集成支持。",
+                features: ["文档操作", "聚合管道", "索引管理", "副本集支持", "分片集群"],
+                tags: ["NoSQL", "文档型", "灵活"],
+                rating: 4.5,
+                stars: 2600,
+                github: "mongodb/mcp",
+                install: "npx @mongodb/mcp-server",
+                pros: ["官方支持", "文档灵活", "扩展性强"],
+                cons: ["学习曲线", "事务限制"],
+                community: "现代应用开发者喜爱，特别是需要灵活数据模型的项目。",
+                useCases: ["内容管理", "实时分析", "物联网"]
+            },
+            {
+                id: "redis",
+                name: "Redis",
+                category: "database",
+                badge: "official",
+                description: "让AI操作Redis做缓存加速、管理Session、发布订阅消息，高并发应用的性能利器。",
+                owner: "Redis",
+                background: "Redis是最流行的内存数据库，广泛用于缓存、消息队列和实时应用。",
+                features: ["键值存储", "缓存功能", "发布订阅", "Lua脚本", "集群支持"],
+                tags: ["缓存", "内存数据库", "高性能"],
+                rating: 4.6,
+                stars: 3400,
+                github: "redis/mcp",
+                install: "npx @redis/mcp-server",
+                pros: ["性能极高", "用途广泛", "社区成熟"],
+                cons: ["内存成本", "持久化复杂"],
+                community: "性能敏感场景必备，社区认为是构建高性能系统不可或缺的组件。",
+                useCases: ["缓存层", "实时数据", "会话存储"]
+            },
+            {
+                id: "qdrant-server",
+                name: "Qdrant Server",
+                category: "database",
+                badge: "official",
+                description: "存向量数据做语义搜索和相似度匹配，RAG应用和推荐系统的核心数据库，AI原生的选择。",
+                owner: "Qdrant",
+                background: "Qdrant是开源的向量相似度搜索引擎，专为AI应用设计。",
+                features: ["向量存储", "相似度搜索", "混合查询", "过滤功能", "云原生"],
+                tags: ["向量数据库", "语义搜索", "AI原生"],
+                rating: 4.7,
+                stars: 4800,
+                github: "qdrant/mcp",
+                install: "npx @qdrant/mcp-server",
+                pros: ["AI原生设计", "性能优秀", "功能丰富"],
+                cons: ["资源消耗大", "需要维护"],
+                community: "RAG和向量搜索场景的首选，社区评价极高，被认为是最佳开源向量数据库。",
+                useCases: ["RAG应用", "语义搜索", "推荐系统"]
+            },
+            {
+                id: "git",
+                name: "Git",
+                category: "devtools",
+                badge: "official",
+                description: "让AI直接操作Git仓库，查看提交历史、对比代码差异、管理分支，日常代码审查和版本管理的标配。",
+                owner: "官方工具",
+                background: "Git是版本控制的标准工具，该MCP提供AI友好的Git操作接口。",
+                features: ["仓库操作", "提交历史", "分支管理", "差异对比", "代码搜索"],
+                tags: ["版本控制", "Git", "必备"],
+                rating: 4.8,
+                stars: 5200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-git",
+                pros: ["功能完整", "稳定可靠", "开发必备"],
+                cons: ["需要Git知识", "CLI依赖"],
+                community: "所有开发者必备工具，社区认为这是AI理解代码的基礎设施。",
+                useCases: ["代码审查", "版本管理", "自动化CI"]
+            },
+            {
+                id: "github-local",
+                name: "GitHub Local",
+                category: "devtools",
+                badge: "local",
+                description: "在AI里直接管理仓库、处理Issue和PR、查看CI状态，开发协作不用来回切页面。",
+                owner: "GitHub",
+                background: "GitHub是全球最大的代码托管平台，该MCP提供本地化的深度集成。",
+                features: ["仓库管理", "Issue操作", "PR协作", "Actions集成", "GraphQL API"],
+                tags: ["GitHub", "协作", "CI/CD"],
+                rating: 4.7,
+                stars: 4100,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-github",
+                pros: ["GitHub原生", "功能全面", "协作支持"],
+                cons: ["需要认证", "API限制"],
+                community: "开源项目团队必备，GitHub用户极力推荐集成其工作流程。",
+                useCases: ["项目管理", "代码协作", "自动化工作流"]
+            },
+            {
+                id: "gitlab",
+                name: "GitLab",
+                category: "devtools",
+                badge: "official",
+                description: "企业级DevOps平台集成，管理MR、CI/CD流水线、Issue跟踪，适合大型团队的协作流程。",
+                owner: "GitLab",
+                background: "GitLab是一体化DevOps平台，该MCP提供完整的企业级功能支持。",
+                features: ["MR管理", "CI/CD集成", "Issue跟踪", "Wiki支持", "安全扫描"],
+                tags: ["GitLab", "DevOps", "企业"],
+                rating: 4.5,
+                stars: 2900,
+                github: "gitlabhq/mcp",
+                install: "npx @gitlab/mcp-server",
+                pros: ["企业级功能", "CI/CD完整", "安全性高"],
+                cons: ["配置复杂", "自托管需求"],
+                community: "企业用户首选，特别欣赏其CI/CD和安全的深度集成。",
+                useCases: ["企业DevOps", "合规项目", "大型团队"]
+            },
+            {
+                id: "gitee",
+                name: "Gitee",
+                category: "devtools",
+                badge: "official",
+                description: "国内开发者首选代码托管平台，在AI里管理仓库和PR，访问快、中文支持好。",
+                owner: "Gitee",
+                background: "Gitee是中国领先的代码托管平台，为国内开发者提供本土化服务。",
+                features: ["仓库管理", "Issue追踪", "PR协作", "GVP支持", "企业版功能"],
+                tags: ["国内平台", "中文", "码云"],
+                rating: 4.4,
+                stars: 1800,
+                github: "gitee-labs/mcp-gitee",
+                install: "npx @gitee/mcp-server",
+                pros: ["国内访问快", "中文支持", "GVP生态"],
+                cons: ["国际生态弱", "功能更新慢"],
+                community: "国内开发者首选，特别是需要快速访问和中文支持的场景。",
+                useCases: ["国内项目", "教育场景", "政府项目"]
+            },
+            {
+                id: "context7",
+                name: "Context7",
+                category: "devtools",
+                badge: "community",
+                description: "让AI获取最新的框架和库文档，解决AI代码生成时用了过时API的问题，编程助手的必备搭档。",
+                owner: "Context7团队",
+                background: "Context7专注于解决AI代码助手的文档时效问题，提供实时更新的文档数据。",
+                features: ["最新文档", "多框架支持", "智能检索", "版本匹配", "代码示例"],
+                tags: ["文档", "时效性", "AI助手"],
+                rating: 4.6,
+                stars: 3600,
+                github: "context7/context7-mcp",
+                install: "npx @context7/mcp-server",
+                pros: ["文档实时", "覆盖全面", "AI优化"],
+                cons: ["依赖网络", "可能不稳定"],
+                community: "AI代码助手用户极力推荐，被认为是解决AI幻觉文档问题的关键工具。",
+                useCases: ["AI编程助手", "文档查询", "代码生成"]
+            },
+            {
+                id: "codegen",
+                name: "Codegen",
+                category: "devtools",
+                badge: "community",
+                description: "自动化代码重构和迁移工具，批量替换代码模式、升级框架版本，大项目迁移全靠它。",
+                owner: "社区开发者",
+                background: "Codemod是Facebook开源的自动化代码重构工具，该MCP扩展其AI能力。",
+                features: ["代码解析", "批量转换", "模式匹配", "安全重构", "迁移支持"],
+                tags: ["重构", "自动化", "迁移"],
+                rating: 4.3,
+                stars: 1900,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-codegen",
+                pros: ["重构高效", "批量处理", "安全可控"],
+                cons: ["学习曲线", "配置复杂"],
+                community: "大型代码库维护者必备，特别适合框架升级和大规模重构场景。",
+                useCases: ["框架迁移", "代码现代化", "批量重构"]
+            },
+            {
+                id: "deepview",
+                name: "DeepView",
+                category: "devtools",
+                badge: "community",
+                description: "用Gemini的超长上下文分析大型代码库，跨文件理解代码逻辑，适合接手老项目或做架构重构。",
+                owner: "社区开发者",
+                background: "利用Google Gemini的超长上下文能力，分析传统方法难以处理的大型代码库。",
+                features: ["大上下文分析", "跨文件理解", "架构可视化", "依赖分析", "智能摘要"],
+                tags: ["Gemini", "大模型", "深度分析"],
+                rating: 4.5,
+                stars: 2400,
+                github: "deepview-ai/mcp",
+                install: "npm install @deepview/mcp",
+                pros: ["上下文大", "分析深入", "架构理解"],
+                cons: ["依赖Gemini", "成本较高"],
+                community: "代码库理解场景的创新方案，社区对其处理大型项目的潜力评价很高。",
+                useCases: ["大型项目分析", "架构重构", "遗留代码理解"]
+            },
+            {
+                id: "file-context",
+                name: "File Context Server",
+                category: "devtools",
+                badge: "official",
+                description: "让AI读取和分析代码文件，理解上下文，支持多种编程语言，是所有AI编程助手的基础能力。",
+                owner: "Model Context Protocol",
+                background: "官方出品的代码分析工具，专注于提供AI友好的文件上下文理解。",
+                features: ["文件读取", "智能搜索", "上下文分析", "多语言支持", "增量更新"],
+                tags: ["文件分析", "代码理解", "必备"],
+                rating: 4.6,
+                stars: 3800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-filesystem",
+                pros: ["官方支持", "稳定可靠", "多语言支持"],
+                cons: ["功能基础", "需要配合其他工具"],
+                community: "所有AI代码工具的基础组件，社区认为这是MCP生态的核心部分。",
+                useCases: ["代码阅读", "上下文理解", "AI编程助手"]
+            },
+            {
+                id: "maven",
+                name: "Maven",
+                category: "devtools",
+                badge: "community",
+                description: "查Maven Java依赖的最新版本和详细信息，写Java项目时让AI帮你找合适的库和版本。",
+                owner: "社区开发者",
+                background: "Maven是Java生态最流行的构建工具，该MCP帮助AI获取准确的依赖信息。",
+                features: ["依赖查询", "版本信息", "仓库搜索", "依赖解析", "最新版本"],
+                tags: ["Java", "Maven", "依赖管理"],
+                rating: 4.2,
+                stars: 1500,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-maven",
+                pros: ["Java支持", "版本准确", "生态完整"],
+                cons: ["仅Java", "需要Maven知识"],
+                community: "Java开发者使用工具，评价稳定，主要用于Java项目的依赖查询。",
+                useCases: ["Java开发", "依赖管理", "版本查询"]
+            },
+            {
+                id: "clojars",
+                name: "Clojars",
+                category: "devtools",
+                badge: "community",
+                description: "查Clojure语言的库依赖和版本信息，Clojure开发者写代码时的必备工具。",
+                owner: "Clojars社区",
+                background: "Clojars是Clojure语言的社区驱动仓库，为Clojure开发者提供依赖服务。",
+                features: ["Clojure依赖", "版本查询", "仓库搜索", "依赖树", "社区贡献"],
+                tags: ["Clojure", "函数式", "JVM"],
+                rating: 4.0,
+                stars: 800,
+                github: "clojars/mcp",
+                install: "npm install @clojars/mcp",
+                pros: ["Clojure专用", "社区驱动", "版本新鲜"],
+                cons: ["生态小众", "文档有限"],
+                community: "Clojure开发者使用，虽然用户群体小，但反馈积极，功能稳定。",
+                useCases: ["Clojure开发", "函数式编程", "JVM项目"]
+            },
+            {
+                id: "package-version",
+                name: "Package Version",
+                category: "devtools",
+                badge: "community",
+                description: "查npm、PyPI、RubyGems等各语言生态的最新包版本，AI写代码时确保依赖版本准确无误。",
+                owner: "社区开发者",
+                background: "统一查询多个包管理生态的最新版本，帮助AI获取准确的版本信息。",
+                features: ["多注册表支持", "最新版本", "稳定性检查", "多语言支持", "批量查询"],
+                tags: ["版本管理", "多语言", "注册表"],
+                rating: 4.4,
+                stars: 2600,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-package-version",
+                pros: ["多生态支持", "使用简单", "版本准确"],
+                cons: ["注册表限制", "网络依赖"],
+                community: "AI代码助手的重要辅助工具，被认为能有效减少版本相关错误。",
+                useCases: ["版本查询", "依赖更新", "AI代码生成"]
+            },
+            {
+                id: "filesystem-local",
+                name: "Filesystem Local",
+                category: "filesystem",
+                badge: "local",
+                description: "安全可控的本地文件操作，可以精细配置AI能访问哪些目录，适合对安全性要求高的场景。",
+                owner: "官方本地服务",
+                background: "Model Context Protocol官方的本地文件系统集成，强调安全和访问控制。",
+                features: ["访问控制", "路径限制", "操作审计", "权限配置", "安全隔离"],
+                tags: ["本地", "安全", "访问控制"],
+                rating: 4.7,
+                stars: 4300,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-filesystem",
+                pros: ["安全优先", "配置灵活", "官方支持"],
+                cons: ["权限配置繁琐", "可能限制功能"],
+                community: "安全敏感场景首选，社区赞赏其细粒度的访问控制设计。",
+                useCases: ["安全环境", "权限管理", "隔离操作"]
+            },
+            {
+                id: "file-system",
+                name: "File System",
+                category: "filesystem",
+                badge: "official",
+                description: "让AI读写文件、管理目录，最基础的文件操作能力，几乎所有场景都会用到的基础工具。",
+                owner: "Model Context Protocol",
+                background: "通用的文件系统操作工具，提供完整的文件和目录管理功能。",
+                features: ["文件读写", "目录操作", "批量处理", "路径解析", "元数据管理"],
+                tags: ["文件系统", "通用", "基础"],
+                rating: 4.8,
+                stars: 5600,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-filesystem",
+                pros: ["功能完整", "稳定可靠", "跨平台"],
+                cons: ["本地限制", "权限问题"],
+                community: "MCP生态的基础组件，所有开发者必备工具，评价极高。",
+                useCases: ["文件管理", "数据处理", "自动化脚本"]
+            },
+            {
+                id: "desktop-commander",
+                name: "Desktop Commander",
+                category: "filesystem",
+                badge: "community",
+                description: "在AI里直接执行终端命令、用diff方式编辑文件，适合做自动化脚本和复杂的文件操作任务。",
+                owner: "社区开发者",
+                background: "将传统命令行工具的能力带入MCP生态，支持复杂的文件操作任务。",
+                features: ["终端命令", "Diff编辑", "批量操作", "脚本执行", "环境集成"],
+                tags: ["终端", "命令行", "集成"],
+                rating: 4.4,
+                stars: 2100,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-desktop-commander",
+                pros: ["命令行能力", "功能强大", "灵活度高"],
+                cons: ["安全风险", "配置复杂"],
+                community: "高级用户的首选工具，社区认为它桥接了传统CLI和现代MCP的能力。",
+                useCases: ["复杂任务", "自动化脚本", "桌面集成"]
+            },
+            {
+                id: "windows-cli",
+                name: "Windows CLI",
+                category: "filesystem",
+                badge: "community",
+                description: "Windows用户的命令行神器，在AI里执行PowerShell和CMD命令，适合Windows系统管理和自动化。",
+                owner: "社区开发者",
+                background: "专为Windows环境设计的命令行工具，支持Windows特有的命令和脚本。",
+                features: ["PowerShell支持", "CMD兼容", "Windows API", "批处理脚本", "注册表操作"],
+                tags: ["Windows", "PowerShell", "命令行"],
+                rating: 4.2,
+                stars: 1600,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-windows-cli",
+                pros: ["Windows原生", "PowerShell支持", "功能完整"],
+                cons: ["仅Windows", "安全性考量"],
+                community: "Windows开发者使用工具，评价稳定，适合Windows自动化场景。",
+                useCases: ["Windows自动化", "系统管理", "PowerShell脚本"]
+            },
+            {
+                id: "everything-search",
+                name: "Everything Search",
+                category: "filesystem",
+                badge: "community",
+                description: "Windows上最快的文件搜索引擎，基于Everything SDK实现秒级搜索，找文件不用等。",
+                owner: "社区开发者",
+                background: "Everything是Windows最快的文件搜索工具，该MCP将其能力引入MCP生态。",
+                features: ["极速搜索", "实时索引", "通配符支持", "正则匹配", "文件预览"],
+                tags: ["文件搜索", "索引", "快速"],
+                rating: 4.6,
+                stars: 2800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-everything-search",
+                pros: ["搜索极快", "资源占用低", "功能强大"],
+                cons: ["仅Windows", "需要安装Everything"],
+                community: "Windows用户极力推荐，特别是需要快速定位文件的场景。",
+                useCases: ["文件定位", "大型文件系统", "快速搜索"]
+            },
+            {
+                id: "pandoc",
+                name: "Pandoc",
+                category: "filesystem",
+                badge: "official",
+                description: "Markdown转PDF、HTML转Docx等各种文档格式互转，写文档、出报告时一键转换格式。",
+                owner: "Pandoc社区",
+                background: "Pandoc是文档转换的标准工具，该MCP提供AI友好的文档处理能力。",
+                features: ["多格式转换", "模板支持", "引用管理", "元数据处理", "批量转换"],
+                tags: ["文档转换", "格式处理", "通用"],
+                rating: 4.5,
+                stars: 3200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-pandoc",
+                pros: ["格式支持全", "转换质量高", "生态成熟"],
+                cons: ["需要Pandoc安装", "PDF转换慢"],
+                community: "文档处理工作流的必备工具，社区认为是格式转换的最佳选择。",
+                useCases: ["文档转换", "格式标准化", "批量处理"]
+            },
+            {
+                id: "excel",
+                name: "Excel",
+                category: "filesystem",
+                badge: "official",
+                description: "让AI读写Excel表格，支持公式计算和数据筛选，数据分析师做报表和数据处理的好帮手。",
+                owner: "Microsoft",
+                background: "微软官方的Excel集成方案，提供完整的数据表处理能力。",
+                features: ["读写Excel", "公式计算", "图表支持", "数据筛选", "格式保持"],
+                tags: ["Excel", "数据分析", "微软"],
+                rating: 4.4,
+                stars: 2900,
+                github: "microsoft/mcp",
+                install: "npx @microsoft/mcp-server-excel",
+                pros: ["官方支持", "功能完整", "格式兼容好"],
+                cons: ["仅Windows/Mac", "需要Excel"],
+                community: "数据分析师的首选工具，被认为是处理Excel数据的最佳集成方案。",
+                useCases: ["数据分析", "报表生成", "数据导入导出"]
+            },
+            {
+                id: "docker",
+                name: "Docker",
+                category: "devops",
+                badge: "official",
+                description: "在AI里管理Docker容器和Compose编排、查看容器日志，日常开发和部署的标配工具。",
+                owner: "Docker",
+                background: "Docker是容器化的标准解决方案，该MCP提供AI友好的容器管理能力。",
+                features: ["容器管理", "镜像操作", "Compose支持", "日志查看", "网络配置"],
+                tags: ["容器", "DevOps", "云原生"],
+                rating: 4.7,
+                stars: 4600,
+                github: "docker/mcp",
+                install: "npx @docker/mcp-server",
+                pros: ["容器管理完整", "官方支持", "生态完善"],
+                cons: ["需要Docker环境", "资源消耗"],
+                community: "DevOps工程师必备工具，社区认为是容器化应用的标配集成。",
+                useCases: ["容器编排", "CI/CD", "微服务"]
+            },
+            {
+                id: "kubernetes",
+                name: "Kubernetes",
+                category: "devops",
+                badge: "official",
+                description: "管理K8s集群的Pod、部署和服务，扩缩容、查日志，云原生运维的必备工具。",
+                owner: "CNCF",
+                background: "Kubernetes是容器编排的标准，该MCP提供K8s集群的AI驱动管理能力。",
+                features: ["Pod管理", "部署操作", "服务配置", "扩缩容", "健康检查"],
+                tags: ["K8s", "容器编排", "云原生"],
+                rating: 4.6,
+                stars: 3800,
+                github: "kubernetes/mcp",
+                install: "npx @kubernetes/mcp-server",
+                pros: ["K8s原生", "功能全面", "集群管理强"],
+                cons: ["K8s复杂度", "配置繁琐"],
+                community: "云原生开发者必备，社区认为其简化了复杂的K8s操作。",
+                useCases: ["云原生应用", "微服务编排", "集群管理"]
+            },
+            {
+                id: "cloudflare",
+                name: "Cloudflare",
+                category: "devops",
+                badge: "official",
+                description: "在AI里部署Workers、管理DNS、操作R2存储，边缘计算和静态网站托管的好帮手。",
+                owner: "Cloudflare",
+                background: "Cloudflare是领先的CDN和边缘计算平台，该MCP提供其服务的集成能力。",
+                features: ["Workers部署", "Pages托管", "DNS管理", "R2存储", "KV操作"],
+                tags: ["边缘计算", "CDN", "Serverless"],
+                rating: 4.5,
+                stars: 3100,
+                github: "cloudflare/mcp",
+                install: "npx @cloudflare/mcp-server",
+                pros: ["边缘能力", "免费额度大", "性能优秀"],
+                cons: ["平台限制", "冷启动延迟"],
+                community: "前端和边缘计算开发者首选，社区赞赏其慷慨的免费额度。",
+                useCases: ["边缘部署", "静态网站", "Serverless API"]
+            },
+            {
+                id: "aws-knowledge",
+                name: "AWS Knowledge Base",
+                category: "devops",
+                badge: "official",
+                description: "从AWS知识库检索最佳实践和架构建议，学AWS、做架构设计时随时问AI。",
+                owner: "Amazon Web Services",
+                background: "AWS官方的知识库集成，帮助开发者获取准确的AWS服务和架构信息。",
+                features: ["AWS知识检索", "架构建议", "服务选择", "成本优化", "安全合规"],
+                tags: ["AWS", "云服务", "知识库"],
+                rating: 4.4,
+                stars: 2700,
+                github: "aws/mcp",
+                install: "npx @aws/mcp-server-knowledge-base",
+                pros: ["AWS官方", "知识准确", "架构指导"],
+                cons: ["仅AWS", "需要AWS账号"],
+                community: "AWS用户认为这是获取AWS最佳实践的有效工具，特别适合架构设计。",
+                useCases: ["AWS学习", "架构设计", "成本优化"]
+            },
+            {
+                id: "firebase",
+                name: "Firebase",
+                category: "devops",
+                badge: "official",
+                description: "集成Firebase的认证、数据库、云函数等功能，快速开发移动应用和实时应用的后端。",
+                owner: "Google Firebase",
+                background: "Firebase是Google的移动和Web应用平台，该MCP提供其服务的深度集成。",
+                features: ["Auth认证", "Firestore数据库", "Cloud Functions", "实时数据库", "云存储"],
+                tags: ["BaaS", "Google", "实时"],
+                rating: 4.6,
+                stars: 3500,
+                github: "firebase/mcp",
+                install: "npx @firebase/mcp-server",
+                pros: ["Google官方", "功能完整", "移动端优化"],
+                cons: ["平台锁定", "免费额度有限"],
+                community: "移动开发者和全栈工程师常用，社区认为其加速了应用开发。",
+                useCases: ["移动应用", "实时应用", "原型快速开发"]
+            },
+            {
+                id: "google-bigquery",
+                name: "Google BigQuery",
+                category: "devops",
+                badge: "official",
+                description: "在AI里写SQL查BigQuery数据仓库，做大数据分析和商业智能，不用打开GCP控制台。",
+                owner: "Google Cloud",
+                background: "BigQuery是Google的无服务器数据仓库，该MCP提供其分析能力的AI集成。",
+                features: ["SQL分析", "大规模查询", "数据处理", "BI集成", "ML支持"],
+                tags: ["数据仓库", "大数据", "SQL"],
+                rating: 4.5,
+                stars: 2400,
+                github: "googlecloud/mcp",
+                install: "npx @googlecloud/mcp-server-bigquery",
+                pros: ["大规模分析", "成本按查询", "Google生态"],
+                cons: ["需要GCP账号", "数据传输成本"],
+                community: "数据工程师和数据科学家使用，社区认为其是云数据仓库的优选。",
+                useCases: ["大数据分析", "商业智能", "数据管道"]
+            },
+            {
+                id: "huggingface-spaces",
+                name: "HuggingFace Spaces",
+                category: "ai",
+                badge: "official",
+                description: "直接调用HuggingFace上的开源模型做推理，图片生成、文本分析都能做，AI开发者的模型超市。",
+                owner: "HuggingFace",
+                background: "HuggingFace是AI模型的开放平台，该MCP提供其Spaces的访问能力。",
+                features: ["模型推理", "Spaces访问", "多模态支持", "模型搜索", "社区模型"],
+                tags: ["AI模型", "开源", "HuggingFace"],
+                rating: 4.7,
+                stars: 4900,
+                github: "huggingface/mcp",
+                install: "npx @huggingface/mcp-server",
+                pros: ["模型丰富", "开源生态", "部署简单"],
+                cons: ["计算资源", "模型质量不一"],
+                community: "AI开发者必备平台，社区认为HuggingFace是开源AI的核心枢纽。",
+                useCases: ["模型推理", "AI应用开发", "模型研究"]
+            },
+            {
+                id: "replicate",
+                name: "Replicate",
+                category: "ai",
+                badge: "official",
+                description: "云上跑开源AI模型，文本生成、图像生成都能一键调用，不用自己部署GPU服务器。",
+                owner: "Replicate",
+                background: "Replicate是运行开源AI模型的云平台，专注于简化和加速AI部署。",
+                features: ["模型推理", "预测调用", "版本管理", "批量处理", "API集成"],
+                tags: ["模型部署", "云推理", "开源"],
+                rating: 4.6,
+                stars: 3700,
+                github: "replicate/mcp",
+                install: "npx @replicate/mcp-server",
+                pros: ["部署简单", "开源模型多", "API友好"],
+                cons: ["成本累积", "依赖外部服务"],
+                community: "AI应用开发者常用工具，社区认为其降低了AI部署的门槛。",
+                useCases: ["AI推理", "原型验证", "模型集成"]
+            },
+            {
+                id: "replicate-flux",
+                name: "Replicate Flux MCP",
+                category: "ai",
+                badge: "community",
+                description: "用Flux模型根据文字描述生成高质量图片，AI绘画和设计辅助的利器，支持多种Flux版本。",
+                owner: "社区开发者",
+                background: "Flux是Black Forest Labs推出的高质量图像生成模型，该MCP提供其能力访问。",
+                features: ["图像生成", "文本到图", "Flux支持", "变体选择", "质量优化"],
+                tags: ["图像生成", "Flux", "AI艺术"],
+                rating: 4.5,
+                stars: 2800,
+                github: "replicate/mcp-flux",
+                install: "npx @replicate/mcp-flux",
+                pros: ["Flux模型支持", "生成质量高", "多版本可选"],
+                cons: ["计算成本高", "需要Replicate账号"],
+                community: "AI艺术创作者极力推荐，Flux的图像质量获得广泛认可。",
+                useCases: ["AI艺术创作", "图像生成", "设计辅助"]
+            },
+            {
+                id: "blender",
+                name: "Blender",
+                category: "media",
+                badge: "official",
+                description: "让AI帮你建模、做材质、控制渲染，3D创作和游戏资产制作的AI辅助工具。",
+                owner: "Blender Foundation",
+                background: "Blender是开源的3D创作套件，该MCP为AI驱动的3D创作提供可能。",
+                features: ["3D建模", "场景创建", "材质编辑", "动画制作", "渲染控制"],
+                tags: ["3D", "Blender", "创作"],
+                rating: 4.4,
+                stars: 2300,
+                github: "/blender-mcp",
+                install: "pip install blender-mcp",
+                pros: ["3D能力完整", "开源免费", "AI辅助创作"],
+                cons: ["Blender复杂性", "学习曲线陡"],
+                community: "3D艺术家和游戏开发者关注，社区认为AI+3D是未来创作的方向。",
+                useCases: ["3D建模", "AI辅助创作", "游戏资产"]
+            },
+            {
+                id: "ableton-live",
+                name: "Ableton Live Integration",
+                category: "media",
+                badge: "community",
+                description: "AI辅助音乐制作，连接Ableton Live，用提示词编曲和控制音轨，音乐创作的新玩法。",
+                owner: "社区开发者",
+                background: "Ableton Live是专业的音乐制作软件，该MCP探索AI辅助音乐创作的可能。",
+                features: ["音乐制作", "MIDI控制", "音轨管理", "效果器控制", "提示词生成"],
+                tags: ["音乐制作", "Ableton", "创作"],
+                rating: 4.2,
+                stars: 1200,
+                github: "ableton/mcp",
+                install: "npm install ableton-mcp",
+                pros: ["音乐制作集成", "创作辅助", "创新应用"],
+                cons: ["依赖Ableton", "功能有限"],
+                community: "电子音乐制作人和创新者关注，社区认为这是AI+音乐的早期探索。",
+                useCases: ["音乐创作", "编曲辅助", "声音设计"]
+            },
+            {
+                id: "ffmpeg",
+                name: "FFmpeg Video Processor",
+                category: "media",
+                badge: "official",
+                description: "让AI处理视频文件，剪辑、缩放、格式转换，批量处理视频的瑞士军刀。",
+                owner: "FFmpeg社区",
+                background: "FFmpeg是音视频处理的终极工具，该MCP提供AI友好的视频处理接口。",
+                features: ["格式转换", "视频剪辑", "缩放处理", "编码转换", "批量处理"],
+                tags: ["视频处理", "FFmpeg", "转码"],
+                rating: 4.5,
+                stars: 3400,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-ffmpeg",
+                pros: ["格式支持全", "功能强大", "开源免费"],
+                cons: ["命令行复杂", "需要FFmpeg安装"],
+                community: "视频处理工程师必备工具，社区认为FFmpeg是视频处理的行业标准。",
+                useCases: ["视频转码", "格式转换", "批量处理"]
+            },
+            {
+                id: "youtube",
+                name: "YouTube",
+                category: "media",
+                badge: "official",
+                description: "搜索YouTube视频、查看详情和评论分析，内容创作者做市场调研和视频分析的利器。",
+                owner: "Google/YouTube",
+                background: "YouTube是全球最大的视频平台，该MCP提供其内容的AI友好访问能力。",
+                features: ["视频搜索", "详情获取", "评论读取", "统计信息", "播放列表"],
+                tags: ["视频", "YouTube", "内容"],
+                rating: 4.4,
+                stars: 3100,
+                github: "google/mcp",
+                install: "npx @google/mcp-server-youtube",
+                pros: ["YouTube数据", "内容发现", "视频分析"],
+                cons: ["API限制", "隐私考量"],
+                community: "内容创作者和市场营销人员使用，社区认为这是YouTube数据分析的好工具。",
+                useCases: ["内容分析", "视频研究", "市场调研"]
+            },
+            {
+                id: "youtube-transcript",
+                name: "YouTube Transcript Server",
+                category: "media",
+                badge: "community",
+                description: "提取YouTube视频字幕和文本内容，支持多语言，做视频内容分析和转写的好工具。",
+                owner: "社区开发者",
+                background: "专注于YouTube字幕提取的工具，帮助获取视频的文字内容用于分析。",
+                features: ["字幕提取", "多语言支持", "格式导出", "时间戳对齐", "批量处理"],
+                tags: ["字幕", "转录", "YouTube"],
+                rating: 4.6,
+                stars: 3800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-youtube-transcript",
+                pros: ["字幕提取准", "多语言支持", "批量能力"],
+                cons: ["字幕依赖", "API限制"],
+                community: "内容创作者和研究人员必备，社区认为这是获取视频文字内容的最佳工具。",
+                useCases: ["内容转录", "研究分析", "无障碍支持"]
+            },
+            {
+                id: "notion",
+                name: "Notion",
+                category: "productivity",
+                badge: "official",
+                description: "让AI读写Notion页面和数据库，管理知识库和项目文档，知识管理爱好者的必备工具。",
+                owner: "Notion",
+                background: "Notion是流行的All-in-one工作空间，该MCP提供其API的AI友好集成。",
+                features: ["页面管理", "数据库操作", "块级编辑", "搜索功能", "模板支持"],
+                tags: ["知识管理", "协作", "Notion"],
+                rating: 4.7,
+                stars: 4500,
+                github: "notionhq/mcp",
+                install: "npx @notionhq/mcp-server",
+                pros: ["Notion生态", "功能完整", "协作支持"],
+                cons: ["API限制", "Notion依赖"],
+                community: "知识管理爱好者极力推荐，社区认为Notion+MCP是AI知识助手的完美组合。",
+                useCases: ["知识库", "项目管理", "笔记整理"]
+            },
+            {
+                id: "airtable",
+                name: "Airtable",
+                category: "productivity",
+                badge: "official",
+                description: "让AI操作Airtable表格数据，管理项目、追踪进度，灵活的数据管理协作工具。",
+                owner: "Airtable",
+                background: "Airtable是灵活的数据库-电子表格混合工具，该MCP扩展其AI集成能力。",
+                features: ["数据读写", "视图管理", "公式支持", "自动化触发", "多视图"],
+                tags: ["数据库", "Airtable", "协作"],
+                rating: 4.5,
+                stars: 3200,
+                github: "airtable/mcp",
+                install: "npx @airtable/mcp-server",
+                pros: ["灵活性高", "视图丰富", "自动化支持"],
+                cons: ["API限制", "数据量限制"],
+                community: "数据管理爱好者和小型团队使用，社区认为其结合了数据库和电子表格的最佳特性。",
+                useCases: ["项目管理", "数据管理", "协作工具"]
+            },
+            {
+                id: "airtable-server",
+                name: "Airtable Server",
+                category: "productivity",
+                badge: "community",
+                description: "增强版Airtable集成，支持批量操作和脚本处理，适合需要大量数据迁移和自动化导入的场景。",
+                owner: "社区开发者",
+                background: "社区开发的增强版Airtable集成，提供更灵活的编程接口和批量操作能力。",
+                features: ["批量操作", "脚本支持", "API封装", "错误处理", "事务支持"],
+                tags: ["批量", "脚本", "高级"],
+                rating: 4.3,
+                stars: 1800,
+                github: "airtable/mcp-server",
+                install: "npm install @airtable/mcp-server-adv",
+                pros: ["批量处理强", "编程友好", "错误处理好"],
+                cons: ["社区维护", "可能不稳定"],
+                community: "需要批量操作的开发者使用，功能比官方版更强大但稳定性稍差。",
+                useCases: ["批量导入", "数据迁移", "自动化工作流"]
+            },
+            {
+                id: "trello",
+                name: "Trello Server",
+                category: "productivity",
+                badge: "official",
+                description: "在AI里操作Trello看板，管理任务卡片和列表，敏捷团队和看板爱好者的协作工具。",
+                owner: "Atlassian/Trello",
+                background: "Trello是基于看板的项目管理工具，该MCP提供其AI友好的操作接口。",
+                features: ["看板管理", "卡片操作", "列表控制", "成员管理", "自动化规则"],
+                tags: ["看板", "项目管理", "协作"],
+                rating: 4.4,
+                stars: 2600,
+                github: "trello/mcp",
+                install: "npx @trello/mcp-server",
+                pros: ["看板功能完整", "协作支持", "可视化强"],
+                cons: ["API限制", "复杂项目可能不够"],
+                community: "敏捷团队和看板爱好者使用，社区认为Trello是轻量级项目管理的首选。",
+                useCases: ["项目管理", "敏捷开发", "团队协作"]
+            },
+            {
+                id: "linear",
+                name: "Linear",
+                category: "productivity",
+                badge: "official",
+                description: "管理Issue、跟踪Sprint、处理Bug，软件工程团队的现代项目管理工具，速度和体验都很好。",
+                owner: "Linear",
+                background: "Linear是专为软件团队设计的Issue跟踪和项目管理工具，该MCP提供其深度集成。",
+                features: ["Issue管理", "项目跟踪", "团队协作", "自动化工作流", "Git集成"],
+                tags: ["Issue跟踪", "工程管理", "Linear"],
+                rating: 4.7,
+                stars: 3400,
+                github: "linear/mcp",
+                install: "npx @linear/mcp-server",
+                pros: ["工程友好", "速度快", "现代化设计"],
+                cons: ["主要面向工程团队", "学习曲线"],
+                community: "软件工程团队极力推荐，社区认为Linear是现代Issue跟踪的最佳选择。",
+                useCases: ["Bug跟踪", " sprints管理", "工程协作"]
+            },
+            {
+                id: "clickup",
+                name: "ClickUp",
+                category: "productivity",
+                badge: "official",
+                description: "一站式项目管理工具，管理任务、跟踪目标和团队协作，适合需要多功能整合的团队。",
+                owner: "ClickUp",
+                background: "ClickUp是All-in-one的生产力平台，该MCP将其任务管理能力与AI集成。",
+                features: ["任务管理", "目标跟踪", "文档协作", "时间管理", "视图多样"],
+                tags: ["All-in-one", "生产力", "任务"],
+                rating: 4.5,
+                stars: 2900,
+                github: "clickup/mcp",
+                install: "npx @clickup/mcp-server",
+                pros: ["功能全面", "定制灵活", "视图丰富"],
+                cons: ["功能过多", "可能过于复杂"],
+                community: "追求一体化解决方案的团队使用，社区认为ClickUp功能丰富但需要时间熟悉。",
+                useCases: ["任务管理", "团队协作", "目标管理"]
+            },
+            {
+                id: "slack",
+                name: "Slack",
+                category: "productivity",
+                badge: "official",
+                description: "让AI发Slack消息、管理频道、搜索聊天记录，团队沟通和工作流自动化的好帮手。",
+                owner: "Salesforce/Slack",
+                background: "Slack是企业通信的领导者，该MCP提供其消息和协作功能的AI集成。",
+                features: ["消息发送", "频道管理", "搜索消息", "用户互动", "webhook支持"],
+                tags: ["企业通信", "消息", "Slack"],
+                rating: 4.6,
+                stars: 3700,
+                github: "slack/mcp",
+                install: "npx @slack/mcp-server",
+                pros: ["企业通信", "集成广泛", "消息功能完整"],
+                cons: ["需要Slack工作区", "API限制"],
+                community: "企业团队和远程协作团队必备，社区认为Slack+MCP是智能助手的好组合。",
+                useCases: ["团队通知", "工作流自动化", "企业集成"]
+            },
+            {
+                id: "todoist",
+                name: "Todoist",
+                category: "productivity",
+                badge: "community",
+                description: "创建和跟踪待办事项、管理项目清单，个人效率管理和GTD实践的经典选择。",
+                owner: "Doist",
+                background: "Todoist是全球最受欢迎的任务管理应用之一，该MCP提供其AI友好的集成。",
+                features: ["任务创建", "项目组织", "标签管理", "截止日期", "重复任务"],
+                tags: ["任务管理", "个人", "Todoist"],
+                rating: 4.5,
+                stars: 2800,
+                github: "doist/mcp",
+                install: "npx @doist/mcp-server",
+                pros: ["任务管理专注", "跨平台", "简单易用"],
+                cons: ["免费版限制", "高级功能需付费"],
+                community: "个人效率爱好者和GTD实践者使用，社区认为Todoist是任务管理的经典选择。",
+                useCases: ["个人任务", "GTD实践", "日常规划"]
+            },
+            {
+                id: "taskmanager",
+                name: "TaskManager",
+                category: "productivity",
+                badge: "community",
+                description: "基础任务管理功能，创建、分配和跟踪任务，适合简单的项目管理和原型开发。",
+                owner: "社区开发者",
+                background: "通用的任务管理MCP服务器，提供基本的任务操作能力。",
+                features: ["任务CRUD", "分配功能", "状态管理", "优先级设置", "项目分组"],
+                tags: ["通用", "任务", "管理"],
+                rating: 4.1,
+                stars: 1400,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-taskmanager",
+                pros: ["通用设计", "功能基础", "易于集成"],
+                cons: ["功能有限", "社区维护"],
+                community: "简单任务管理需求的用户使用，适合作为基础任务系统的集成点。",
+                useCases: ["基础任务", "简单项目", "原型开发"]
+            },
+            {
+                id: "apple-shortcuts",
+                name: "Apple Shortcuts",
+                category: "productivity",
+                badge: "community",
+                description: "连接苹果快捷指令，在AI里触发iOS/macOS自动化操作，苹果生态用户的效率神器。",
+                owner: "Apple",
+                background: "Apple Shortcuts是苹果的自动化工具，该MCP扩展其在AI助手中的使用。",
+                features: ["快捷指令执行", "变量传递", "条件分支", "设备控制", "应用交互"],
+                tags: ["苹果", "iOS", "自动化"],
+                rating: 4.3,
+                stars: 1900,
+                github: "apple/mcp-shortcuts",
+                install: "npm install @apple/mcp-shortcuts",
+                pros: ["苹果生态集成", "自动化强大", "跨设备"],
+                cons: ["仅苹果平台", "权限复杂"],
+                community: "苹果生态用户使用，社区认为这是将AI助手融入苹果工作流的桥梁。",
+                useCases: ["iOS自动化", "快捷指令", "苹果生态"]
+            },
+            {
+                id: "stripe",
+                name: "Stripe",
+                category: "business",
+                badge: "official",
+                description: "处理支付、管理订阅、生成发票，电商和SaaS项目接入支付功能的标准方案。",
+                owner: "Stripe",
+                background: "Stripe是在线支付的领导者，该MCP提供其支付API的AI友好集成。",
+                features: ["支付处理", "订阅管理", "退款处理", "发票生成", "客户管理"],
+                tags: ["支付", "金融", "Stripe"],
+                rating: 4.7,
+                stars: 3900,
+                github: "stripe/mcp",
+                install: "npx @stripe/mcp-server",
+                pros: ["支付完整", "开发者友好", "合规支持"],
+                cons: ["需要Stripe账号", "交易费用"],
+                community: "电商和SaaS开发者必备，社区认为Stripe是支付集成的行业标准。",
+                useCases: ["电商支付", "订阅服务", "发票管理"]
+            },
+            {
+                id: "contentful",
+                name: "Contentful",
+                category: "business",
+                badge: "official",
+                description: "管理内容网站的文章和资产，多环境发布，适合做内容运营和多渠道内容管理。",
+                owner: "Contentful",
+                background: "Contentful是领先的Headless CMS平台，该MCP提供其内容的AI管理能力。",
+                features: ["内容创建", "资产库", "版本控制", "发布管理", "多环境"],
+                tags: ["CMS", "内容管理", "Headless"],
+                rating: 4.5,
+                stars: 2400,
+                github: "contentful/mcp",
+                install: "npx @contentful/mcp-server",
+                pros: ["CMS功能完整", "灵活内容模型", "API优先"],
+                cons: ["学习曲线", "内容建模复杂"],
+                community: "内容团队和全栈开发者使用，社区认为Contentful是现代内容管理的优选。",
+                useCases: ["内容网站", "多渠道发布", "内容运营"]
+            },
+            {
+                id: "google-drive",
+                name: "Google Drive",
+                category: "business",
+                badge: "official",
+                description: "让AI搜索和读取Google Drive文件，管理文档和协作内容，Google工作区用户的必备工具。",
+                owner: "Google",
+                background: "Google Drive是云存储和协作的领导者，该MCP提供其服务的AI集成。",
+                features: ["文件访问", "搜索功能", "权限管理", "版本历史", "协作支持"],
+                tags: ["云存储", "Google", "协作"],
+                rating: 4.6,
+                stars: 4100,
+                github: "google/mcp-drive",
+                install: "npx @google/mcp-server-drive",
+                pros: ["Google生态", "协作功能", "存储容量大"],
+                cons: ["需要Google账号", "隐私考量"],
+                community: "Google工作区用户必备，社区认为这是访问Google内容的标准方式。",
+                useCases: ["文档管理", "团队协作", "云存储"]
+            },
+            {
+                id: "lunchmoney",
+                name: "Lunchmoney",
+                category: "business",
+                badge: "community",
+                description: "追踪个人收支、管理预算、自动分类账单，个人理财和记账的好帮手。",
+                owner: "Lunchmoney",
+                background: "Lunchmoney是个人财务追踪工具，该MCP扩展其AI辅助的财务管理能力。",
+                features: ["交易导入", "预算跟踪", "资产分类", "报告生成", "API集成"],
+                tags: ["财务管理", "个人金融", "预算"],
+                rating: 4.2,
+                stars: 1100,
+                github: "lunchmoney/mcp",
+                install: "npm install @lunchmoney/mcp",
+                pros: ["财务追踪专注", "API友好", "自动分类"],
+                cons: ["主要面向个人", "功能有限"],
+                community: "个人理财爱好者使用，社区认为Lunchmoney是简单高效的个人财务工具。",
+                useCases: ["个人预算", "支出追踪", "财务报告"]
+            },
+            {
+                id: "airbnb-search",
+                name: "Airbnb Search",
+                category: "business",
+                badge: "community",
+                description: "搜索Airbnb房源、比价、看评价，旅行规划和短期租赁市场分析的工具。",
+                owner: "社区开发者",
+                background: "专门用于Airbnb数据获取和分析的MCP工具，帮助旅行规划和市场研究。",
+                features: ["房源搜索", "详情获取", "价格比较", "评价分析", "可用性查询"],
+                tags: ["旅行", "Airbnb", "房源"],
+                rating: 4.0,
+                stars: 850,
+                github: "airbnb/mcp-search",
+                install: "npm install @airbnb/mcp-search",
+                pros: ["旅行规划", "市场数据", "比价功能"],
+                cons: ["数据限制", "可能违反TOS"],
+                community: "旅行规划工具开发者和市场研究人员使用，数据获取能力有限但有创意。",
+                useCases: ["旅行规划", "市场分析", "价格比较"]
+            },
+            {
+                id: "instagram-analysis",
+                name: "Instagram Engagement Analysis",
+                category: "business",
+                badge: "community",
+                description: "分析Instagram互动数据和受众画像，内容创作者和品牌做社交媒体运营的参考工具。",
+                owner: "社区开发者",
+                background: "专注于Instagram数据分析的MCP工具，帮助创作者和品牌了解受众。",
+                features: ["互动分析", "受众数据", "内容表现", "趋势追踪", "竞争对手"],
+                tags: ["社交媒体", "Instagram", "分析"],
+                rating: 4.1,
+                stars: 950,
+                github: "instagram/mcp-analytics",
+                install: "npm install @instagram/mcp-analytics",
+                pros: ["社交分析", "受众洞察", "内容优化"],
+                cons: ["平台限制", "数据准确性"],
+                community: "社交媒体营销人员和内容创作者使用，数据获取有一定限制但有价值。",
+                useCases: ["社交分析", "内容策略", "受众研究"]
+            },
+            {
+                id: "graphlit",
+                name: "Graphlit",
+                category: "business",
+                badge: "community",
+                description: "让AI帮你处理和转换各种非结构化数据，准备RAG应用的数据源，多格式内容处理的集成方案。",
+                owner: "Graphlit",
+                background: "Graphlit是数据摄取和处理平台，该MCP帮助AI访问和理解各种数据格式。",
+                features: ["数据摄取", "格式转换", "内容理解", "检索增强", "多源集成"],
+                tags: ["数据摄取", "RAG", "非结构化"],
+                rating: 4.4,
+                stars: 1600,
+                github: "graphlit/mcp",
+                install: "npm install @graphlit/mcp",
+                pros: ["多格式支持", "RAG友好", "自动化处理"],
+                cons: ["需要Graphlit账号", "学习曲线"],
+                community: "RAG应用开发者和数据工程师关注，社区认为Graphlit简化了数据准备流程。",
+                useCases: ["RAG数据准备", "内容处理", "多源集成"]
+            },
+            {
+                id: "memory",
+                name: "Memory",
+                category: "memory",
+                badge: "official",
+                description: "让AI拥有长期记忆，跨会话记住上下文，基于知识图谱的持久化记忆，打造个性化AI助手。",
+                owner: "Model Context Protocol",
+                background: "官方出品的AI记忆解决方案，帮助AI在会话之间保持上下文和记忆。",
+                features: ["知识图谱", "持久化", "上下文记忆", "关系推理", "增量学习"],
+                tags: ["记忆", "知识图谱", "持久化"],
+                rating: 4.7,
+                stars: 4800,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-memory",
+                pros: ["官方支持", "知识图谱强", "持久化可靠"],
+                cons: ["资源消耗", "需要配置"],
+                community: "需要长期上下文的应用必备，社区认为这是AI记忆系统的最佳实践。",
+                useCases: ["AI助手", "对话系统", "个性化"]
+            },
+            {
+                id: "persistent-knowledge",
+                name: "Persistent Knowledge Graph",
+                category: "memory",
+                badge: "community",
+                description: "让Claude等AI工具跨会话读写知识图谱，长期保存和检索知识，适合构建企业知识库。",
+                owner: "社区开发者",
+                background: "基于知识图谱的持久记忆系统，为AI提供长期知识存储和检索能力。",
+                features: ["知识存储", "关系管理", "查询能力", "自动更新", "多工具支持"],
+                tags: ["知识图谱", "跨会话", "记忆"],
+                rating: 4.5,
+                stars: 3200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-knowledge-graph",
+                pros: ["跨工具支持", "知识组织", "查询灵活"],
+                cons: ["配置复杂", "学习曲线"],
+                community: "高级AI应用开发者使用，社区认为这是构建智能AI系统的关键组件。",
+                useCases: ["知识管理", "AI助手", "企业知识库"]
+            },
+            {
+                id: "sequential-thinking",
+                name: "Sequential Thinking",
+                category: "memory",
+                badge: "official",
+                description: "让AI一步步推理复杂问题，记录思考过程，适合做问题分析、决策支持和需要可解释性的场景。",
+                owner: "Model Context Protocol",
+                background: "官方出品的推理增强工具，帮助AI进行结构化和透明的思考过程。",
+                features: ["步骤推理", "决策记录", "回溯能力", "分支探索", "透明度"],
+                tags: ["推理", "问题解决", "结构化"],
+                rating: 4.6,
+                stars: 3600,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-sequential-thinking",
+                pros: ["推理透明", "决策可追溯", "问题解决强"],
+                cons: ["增加token消耗", "复杂任务较慢"],
+                community: "需要可解释AI的开发者和研究者使用，社区认为这是提升AI可靠性的工具。",
+                useCases: ["问题分析", "决策支持", "AI可解释性"]
+            },
+            {
+                id: "codex-keeper",
+                name: "Aindreyway Codex Keeper",
+                category: "memory",
+                badge: "community",
+                description: "管理和复用代码片段和知识，让AI记住你常用的代码模式，适合个人知识管理和团队共享。",
+                owner: "Aindreyway",
+                background: "专注于代码和知识管理的MCP工具，帮助AI组织和复用有价值的信息。",
+                features: ["代码储备", "知识库", "智能检索", "版本管理", "标签分类"],
+                tags: ["代码库", "知识管理", "复用"],
+                rating: 4.3,
+                stars: 1800,
+                github: "aindreyway/codex-keeper",
+                install: "npm install @aindreyway/codex-keeper",
+                pros: ["代码管理专注", "知识组织", "复用友好"],
+                cons: ["社区规模小", "功能有限"],
+                community: "需要管理大量代码片段的开发者使用，适合个人知识管理和团队共享。",
+                useCases: ["代码片段", "知识库", "团队共享"]
+            },
+            {
+                id: "figma-ai-bridge",
+                name: "Figma AI Bridge",
+                category: "frontend",
+                badge: "local",
+                description: "让AI查看和分析Figma设计稿，提取样式和组件信息，设计师和前端开发的协作桥梁。",
+                owner: "Figma",
+                background: "Figma是在线设计和协作平台，该MCP提供其设计数据的AI访问能力。",
+                features: ["设计查看", "评论获取", "组件分析", "样式提取", "协作支持"],
+                tags: ["设计", "Figma", "协作"],
+                rating: 4.6,
+                stars: 3500,
+                github: "figma/mcp",
+                install: "npx @figma/mcp-server",
+                pros: ["设计生态", "协作功能", "组件管理"],
+                cons: ["需要Figma账号", "API限制"],
+                community: "设计开发者和UX团队必备，社区认为Figma是设计协作的标准工具。",
+                useCases: ["设计开发", "设计系统", "协作评审"]
+            },
+            {
+                id: "shadcn-ui",
+                name: "shadcn/ui",
+                category: "frontend",
+                badge: "local",
+                description: "React+Tailwind的最佳UI组件库，直接用现成的高质量组件，快速搭建漂亮的前端页面。",
+                owner: "shadcn",
+                background: "shadcn/ui是近年来最受欢迎的React UI组件库，以其高质量和可定制性著称。",
+                features: ["组件库", "可访问性", "主题定制", "代码复制", "持续更新"],
+                tags: ["UI组件", "React", "Tailwind"],
+                rating: 4.8,
+                stars: 6200,
+                github: "shadcn-ui/mcp",
+                install: "npx @shadcn/mcp-server",
+                pros: ["组件精美", "可访问性好", "代码拥有权"],
+                cons: ["需要React知识", "Tailwind依赖"],
+                community: "React开发者极力推荐，社区认为shadcn/ui是现代Web开发的首选UI库。",
+                useCases: ["Web开发", "组件复用", "快速原型"]
+            },
+            {
+                id: "chrome-devtools",
+                name: "Chrome DevTools MCP",
+                category: "frontend",
+                badge: "local",
+                description: "让AI控制Chrome开发者工具，做性能分析、网络调试和自动化操作，前端调试的创新方案。",
+                owner: "Google Chrome",
+                background: "Chrome DevTools是网页开发的必备工具，该MCP将其能力带给AI助手。",
+                features: ["性能分析", "网络调试", "元素检查", "控制台访问", "自动化操作"],
+                tags: ["调试", "Chrome", "开发工具"],
+                rating: 4.7,
+                stars: 4200,
+                github: "chrome/mcp-devtools",
+                install: "npx @chrome/mcp-devtools",
+                pros: ["开发工具完整", "调试强大", "自动化支持"],
+                cons: ["需要Chrome", "权限要求"],
+                community: "前端开发者必备工具，社区认为这是将AI带入开发调试流程的创新方案。",
+                useCases: ["前端调试", "性能优化", "自动化测试"]
+            },
+            {
+                id: "puppeteer",
+                name: "Puppeteer",
+                category: "frontend",
+                badge: "local",
+                description: "让AI操控无头浏览器自动填表单、截图、抓数据，自动化测试和数据采集的经典工具。",
+                owner: "Google",
+                background: "Puppeteer是Node.js的无头Chrome API，该MCP提供其AI友好的自动化能力。",
+                features: ["浏览器自动化", "网页截图", "PDF生成", "表单填写", "数据抓取"],
+                tags: ["浏览器自动化", "爬虫", "Puppeteer"],
+                rating: 4.6,
+                stars: 3900,
+                github: "puppeteer/mcp",
+                install: "npx @puppeteer/mcp-server",
+                pros: ["自动化能力强", "无头运行", "功能全面"],
+                cons: ["资源消耗", "需要Chrome"],
+                community: "自动化测试和数据采集开发者必备，社区认为Puppeteer是浏览器自动化的标准。",
+                useCases: ["自动化测试", "网页抓取", "截图生成"]
+            },
+            {
+                id: "playwright",
+                name: "Playwright",
+                category: "frontend",
+                badge: "official",
+                description: "跨浏览器自动化测试方案，让AI像人一样操作网页，端到端测试和网页自动化的首选。",
+                owner: "Microsoft",
+                background: "Playwright是微软出品的跨平台浏览器自动化工具，该MCP扩展其AI集成。",
+                features: ["跨浏览器", "自动等待", "网络拦截", "移动端模拟", "录制回放"],
+                tags: ["浏览器自动化", "测试", "跨平台"],
+                rating: 4.7,
+                stars: 4600,
+                github: "microsoft/playwright-mcp",
+                install: "npx @microsoft/mcp-server-playwright",
+                pros: ["跨浏览器支持", "现代API", "自动等待"],
+                cons: ["资源消耗大", "学习曲线"],
+                community: "测试工程师和自动化开发者极力推荐，社区认为Playwright是端到端测试的首选。",
+                useCases: ["端到端测试", "网页自动化", "数据采集"]
+            },
+            {
+                id: "testsprite",
+                name: "TestSprite",
+                category: "frontend",
+                badge: "local",
+                description: "让AI理解需求自动生成测试用例，减少手工写测试的工作量，测试自动化的新方向。",
+                owner: "TestSprite",
+                background: "TestSprite是AI驱动的测试生成工具，该MCP将其能力带入MCP生态系统。",
+                features: ["测试生成", "需求理解", "智能维护", "覆盖率分析", "自动修复"],
+                tags: ["AI测试", "自动化", "测试生成"],
+                rating: 4.4,
+                stars: 2100,
+                github: "testsprite/mcp",
+                install: "npm install @testsprite/mcp",
+                pros: ["测试自动化", "需求驱动", "维护智能"],
+                cons: ["可能需要人工审查", "成本考量"],
+                community: "测试自动化团队关注，社区认为AI生成测试是测试领域的未来方向。",
+                useCases: ["自动化测试", "回归测试", "测试维护"]
+            },
+            {
+                id: "sentry",
+                name: "Sentry",
+                category: "monitoring",
+                badge: "official",
+                description: "追踪应用错误和崩溃、分析性能问题，上线后监控应用健康状态的标配工具。",
+                owner: "Sentry",
+                background: "Sentry是应用监控的领先平台，该MCP提供其错误和性能数据的AI访问。",
+                features: ["错误追踪", "崩溃报告", "性能监控", "版本关联", "团队协作"],
+                tags: ["监控", "错误追踪", "Sentry"],
+                rating: 4.6,
+                stars: 3400,
+                github: "sentry/mcp",
+                install: "npx @sentry/mcp-server",
+                pros: ["监控完整", "错误分析强", "集成广泛"],
+                cons: ["需要Sentry账号", "数据隐私"],
+                community: "DevOps和后端开发者必备，社区认为Sentry是应用监控的标准选择。",
+                useCases: ["错误监控", "性能追踪", "上线检查"]
+            },
+            {
+                id: "raygun",
+                name: "Raygun",
+                category: "monitoring",
+                badge: "official",
+                description: "全链路应用性能监控，追踪错误、分析性能和用户体验，企业级应用的监控方案。",
+                owner: "Raygun",
+                background: "Raygun是端到端的应用性能监控平台，该MCP提供其APM能力的AI集成。",
+                features: ["错误追踪", "性能监控", "崩溃分析", "用户体验", "部署追踪"],
+                tags: ["APM", "监控", "性能"],
+                rating: 4.5,
+                stars: 2400,
+                github: "raygun/mcp",
+                install: "npm install @raygun/mcp-server",
+                pros: ["APM功能全", "用户体验追踪", "部署关联"],
+                cons: ["主要企业用户", "价格较高"],
+                community: "企业级应用监控团队使用，社区认为Raygun提供了全面的应用可见性。",
+                useCases: ["APM监控", "用户体验", "错误分析"]
+            },
+            {
+                id: "ida-pro-mcp",
+                name: "IDA Pro MCP",
+                category: "utility",
+                badge: "local",
+                description: "AI辅助逆向工程，连接IDA Pro分析二进制文件和漏洞，安全研究员的得力助手。",
+                owner: "Hex-Rays",
+                background: "IDA Pro是业界领先的逆向工程工具，该MCP探索AI辅助的二进制分析能力。",
+                features: ["反汇编分析", "函数识别", "交叉引用", "脚本自动化", "协作支持"],
+                tags: ["逆向工程", "二进制", "安全"],
+                rating: 4.3,
+                stars: 1600,
+                github: "hex-rays/mcp-ida",
+                install: "pip install ida-mcp",
+                pros: ["逆向能力强", "AI辅助分析", "专业工具"],
+                cons: ["需要IDA Pro许可", "学习曲线陡"],
+                community: "安全研究人员和逆向工程师使用，社区认为这是将AI引入逆向工程的重要尝试。",
+                useCases: ["逆向工程", "漏洞分析", "恶意软件分析"]
+            },
+            {
+                id: "time",
+                name: "Time",
+                category: "utility",
+                badge: "official",
+                description: "查时区、做时间转换，处理夏令时，全球化应用开发中避免时区bug的实用工具。",
+                owner: "Model Context Protocol",
+                background: "官方出品的时间处理工具，帮助AI正确处理全球化和时区相关问题。",
+                features: ["时区转换", "时间计算", "IANA数据库", "夏令时处理", "格式转换"],
+                tags: ["时间", "时区", "全球化"],
+                rating: 4.5,
+                stars: 2900,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-time",
+                pros: ["时区处理准", "IANA数据", "官方支持"],
+                cons: ["功能相对单一", "网络依赖"],
+                community: "需要处理全球化应用的开发者必备，社区认为这是避免时区bug的好工具。",
+                useCases: ["全球化应用", "调度系统", "时区处理"]
+            },
+            {
+                id: "google-maps",
+                name: "Google Maps",
+                category: "utility",
+                badge: "official",
+                description: "查地点、规划路线、算距离，物流应用和位置服务开发中依赖的地图数据工具。",
+                owner: "Google",
+                background: "Google Maps是全球领先的地图服务，该MCP提供其位置和导航能力的AI集成。",
+                features: ["地点搜索", "路线规划", "地理编码", "距离计算", "地点详情"],
+                tags: ["地图", "位置服务", "Google"],
+                rating: 4.6,
+                stars: 3600,
+                github: "google/mcp-maps",
+                install: "npx @google/mcp-server-maps",
+                pros: ["地图数据全面", "路线规划强", "全球覆盖"],
+                cons: ["需要Google API密钥", "使用限制"],
+                community: "位置应用和物流开发者必备，社区认为Google Maps是地图服务的黄金标准。",
+                useCases: ["位置服务", "路线规划", "物流应用"]
+            },
+            {
+                id: "hotnews",
+                name: "HotNews Server",
+                category: "utility",
+                badge: "community",
+                description: "获取实时热点新闻和热门话题，适合做新闻聚合、舆情分析和内容推荐应用。",
+                owner: "社区开发者",
+                background: "专注于新闻聚合和热点追踪的MCP工具，帮助AI获取实时新闻信息。",
+                features: ["热点新闻", "话题聚合", "趋势分析", "来源追踪", "情感分析"],
+                tags: ["新闻", "热点", "聚合"],
+                rating: 4.2,
+                stars: 1500,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-hotnews",
+                pros: ["新闻实时", "热点追踪", "聚合能力强"],
+                cons: ["来源依赖", "可能需要付费"],
+                community: "新闻应用开发者和内容聚合平台使用，适合需要新闻数据的AI应用。",
+                useCases: ["新闻应用", "内容聚合", "舆情分析"]
+            },
+            {
+                id: "mcp-feedback",
+                name: "MCP Feedback Enhanced",
+                category: "utility",
+                badge: "local",
+                description: "收集和分析用户反馈，帮助产品团队了解用户需求，改进产品和提升用户体验。",
+                owner: "官方本地服务",
+                background: "官方出品的用户反馈工具，帮助AI应用收集和管理用户反馈。",
+                features: ["反馈收集", "情感分析", "优先级排序", "回复管理", "数据分析"],
+                tags: ["反馈", "用户", "分析"],
+                rating: 4.4,
+                stars: 2200,
+                github: "modelcontextprotocol/servers",
+                install: "npx @modelcontextprotocol/server-feedback",
+                pros: ["官方支持", "功能实用", "易于集成"],
+                cons: ["功能基础", "可能需要扩展"],
+                community: "产品团队和客户支持团队使用，社区认为这是收集用户反馈的有效工具。",
+                useCases: ["用户反馈", "产品改进", "客户服务"]
+            },
+            {
+                id: "insforge",
+                name: "InsForge",
+                category: "utility",
+                badge: "local",
+                description: "一键生成生产级别的后端代码，快速搭建API和数据库，适合MVP项目快速验证想法。",
+                owner: "InsForge",
+                background: "InsForge是快速后端开发平台，该MCP帮助AI快速生成生产级别的后端代码。",
+                features: ["后端生成", "API创建", "数据库设计", "部署支持", "扩展能力"],
+                tags: ["后端", "快速开发", "部署"],
+                rating: 4.3,
+                stars: 1800,
+                github: "insforge/mcp",
+                install: "npm install @insforge/mcp",
+                pros: ["开发速度快", "生产级别", "一键部署"],
+                cons: ["可能限制灵活性", "平台锁定"],
+                community: "快速原型和MVP开发团队关注，社区认为这是加速后端开发的有力工具。",
+                useCases: ["快速开发", "原型构建", "MVP项目"]
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalf = rating % 1 >= 0.5;
+            let starsHtml = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    starsHtml += '<span class="star">★</span>';
+                } else if (i === fullStars && hasHalf) {
+                    starsHtml += '<span class="star">★</span>';
+                } else {
+                    starsHtml += '<span class="star empty">★</span>';
+                }
+            }
+            return starsHtml;
+        }
+
+        function renderMCPCards(mcps) {
+            const grid = document.getElementById('mcpGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (mcps.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = mcps.map(mcp => `
+                <div class="mcp-card" onclick="openModal('${mcp.id}')">
+                    <div class="mcp-header">
+                        <div class="mcp-name">${mcp.name}</div>
+                        <span class="mcp-badge badge-${mcp.badge}">${mcp.badge === 'local' ? '本地' : mcp.badge === 'official' ? '官方' : '社区'}</span>
+                    </div>
+                    <div class="mcp-description">${mcp.description}</div>
+                    <div class="mcp-meta">
+                        <div class="meta-item">🏢 <span>${mcp.owner}</span></div>
+                        <div class="meta-item">⭐ <span>${mcp.stars.toLocaleString()}</span></div>
+                    </div>
+                    <div class="mcp-tags">
+                        ${mcp.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="mcp-footer">
+                        <div class="rating">${renderStars(mcp.rating)}</div>
+                        <a href="#" class="detail-link" onclick="event.stopPropagation(); openModal('${mcp.id}')">查看详情 →</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(id) {
+            const mcp = mcpData.find(m => m.id === id);
+            if (!mcp) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="modal-header">
+                    <h2 class="modal-title">${mcp.name}</h2>
+                    <span class="mcp-badge badge-${mcp.badge}" style="font-size: 14px; padding: 6px 16px;">${mcp.badge === 'local' ? '本地' : mcp.badge === 'official' ? '官方' : '社区'}</span>
+                </div>
+
+                <div class="modal-section">
+                    <h3>📖 概述</h3>
+                    <p>${mcp.description}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🏢 所属机构</h3>
+                    <p><strong>${mcp.owner}</strong></p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>📚 背景介绍</h3>
+                    <p>${mcp.background}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>✨ 核心功能</h3>
+                    <ul>
+                        ${mcp.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h3>💡 典型应用场景</h3>
+                    <ul>
+                        ${mcp.useCases.map(u => `<li>${u}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h3>✅ 优势</h3>
+                    <ul>
+                        ${mcp.pros.map(p => `<li>${p}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="modal-section">
+                    <h3>⚠️ 局限性</h3>
+                    <ul>
+                        ${mcp.cons.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="community-evaluation">
+                    <h4>💬 社区评价</h4>
+                    <p>${mcp.community}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>📦 安装命令</h3>
+                    <div class="code-block">
+                        <code>${mcp.install}</code>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">${mcp.rating}</div>
+                        <div class="stat-label">评分</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${mcp.stars.toLocaleString()}</div>
+                        <div class="stat-label">GitHub Stars</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${mcp.tags.length}</div>
+                        <div class="stat-label">标签数量</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${mcp.features.length}</div>
+                        <div class="stat-label">功能数量</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function filterMCPs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = mcpData.filter(mcp => {
+                const matchesSearch = mcp.name.toLowerCase().includes(searchTerm) ||
+                    mcp.description.toLowerCase().includes(searchTerm) ||
+                    mcp.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                    mcp.owner.toLowerCase().includes(searchTerm);
+                const matchesCategory = currentCategory === 'all' || mcp.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
+            renderMCPCards(filtered);
+        }
+
+        function setupCategoryTabs() {
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentCategory = tab.dataset.category;
+                    filterMCPs();
+                });
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', filterMCPs);
+
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        renderMCPCards(mcpData);
+        setupCategoryTabs();
+    </script>
+</body>
+</html>
